@@ -27,6 +27,10 @@
         <fileset id="fileset" name="Spring Persist Mybatis" removed="false">
           <file>file://$MODULE_DIR$/src/main/resources/spring-persist-mybatis.xml</file>
         </fileset>
+        <fileset id="fileset2" name="Spring Persist Tx" removed="false">
+          <file>file://$MODULE_DIR$/src/main/resources/spring-persist-tx.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/spring-persist-mybatis.xml</file>
+        </fileset>
       </configuration>
     </facet>
   </component>
