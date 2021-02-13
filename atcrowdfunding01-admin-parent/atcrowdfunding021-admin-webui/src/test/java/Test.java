@@ -1,5 +1,6 @@
 import com.atguigu.crowd.entity.Admin;
 import com.atguigu.crowd.mapper.AdminMapper;
+import com.atguigu.crowd.service.api.AdminService;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +14,7 @@ import java.sql.SQLException;
 
 // Spring整合JUnit
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:spring-persist-mybatis.xml"})
+@ContextConfiguration(locations = {"classpath:spring-persist-mybatis.xml", "classpath:spring-persist-tx.xml"})
 public class Test {
 
     @Autowired
@@ -21,6 +22,9 @@ public class Test {
 
     @Autowired
     private AdminMapper adminMapper;
+
+    @Autowired
+    private AdminService adminService;
 
     @org.junit.Test
     public void test1() throws SQLException {
@@ -30,11 +34,8 @@ public class Test {
 
     @org.junit.Test
     public void test2() throws SQLException {
-//        Logger logger = LoggerFactory.getLogger(adminMapper.getClass());
-
         Admin admin = new Admin(null, "tom6", "123123", "汤姆", "tom@qq.com", null);
         int count = adminMapper.insert(admin);
-//        logger.debug("影响行数：" + count);
     }
 
     @org.junit.Test
@@ -45,5 +46,11 @@ public class Test {
         logger.info("info...");
         logger.warn("warn...");
         logger.error("error...");
+    }
+
+    @org.junit.Test
+    public void testTx() {
+        Admin admin = new Admin(null, "jerry6", "123123", "杰瑞", "jerry@qq.com", null);
+        adminService.saveAdmin(admin);
     }
 }
