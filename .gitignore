@@ -1,0 +1,4 @@
+# Project exclude paths
+/atcrowdfunding01-admin-parent/atcrowdfunding03-admin-component/target/
+/atcrowdfunding01-admin-parent/atcrowdfunding04-admin-entity/target/
+/atcrowdfunding01-admin-parent/atcrowdfunding021-admin-webui/target/
