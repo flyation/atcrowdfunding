@@ -50,7 +50,7 @@ public class Test {
 
     @org.junit.Test
     public void testTx() {
-        Admin admin = new Admin(null, "jerry6", "123123", "杰瑞", "jerry@qq.com", null);
+        Admin admin = new Admin(null, "jerry8", "123123", "杰瑞", "jerry@qq.com", null);
         adminService.saveAdmin(admin);
     }
 }

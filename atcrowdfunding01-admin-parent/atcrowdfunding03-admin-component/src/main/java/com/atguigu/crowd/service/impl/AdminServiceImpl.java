@@ -6,6 +6,8 @@ import com.atguigu.crowd.service.api.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AdminServiceImpl implements AdminService {
 
@@ -16,5 +18,10 @@ public class AdminServiceImpl implements AdminService {
     public void saveAdmin(Admin admin) {
         adminMapper.insert(admin);
 //        int i = 1 / 0;
+    }
+
+    @Override
+    public List<Admin> getAll() {
+        return adminMapper.selectByExample(null);
     }
 }
