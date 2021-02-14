@@ -23,10 +23,13 @@
     <bean id="simpleMappingExceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
         <property name="exceptionMappings">
             <props>
-
                 <!-- key指定异常全类名，标签体中指定视图名  -->
                 <prop key="java.lang.Exception">system-error</prop>
             </props>
         </property>
     </bean>
+
+    <!-- 配置view-controller，作用是直接将请求路径和视图关联起来，不必再写handler方法 -->
+    <mvc:view-controller path="/admin/to/login/page.html" view-name="admin-login"/>
+    <mvc:view-controller path="/admin/to/main/page.html" view-name="admin-main"/>
 </beans>

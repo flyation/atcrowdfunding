@@ -14,6 +14,7 @@
     <%-- pageContext.request.contextPath的值开头自己带了斜杠 --%>
     <base href="http://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}/">
     <script src="jquery/jquery-2.1.1.min.js"></script>
+    <script src="layer-v3.1.1/layer/layer.js"></script>
     <script>
         $(function () {
             $('#btn1').click(function () {
@@ -48,6 +49,10 @@
                     }
                 })
             })
+
+            $('#btn3').click(function () {
+                layer.msg('layer..')
+            })
         })
     </script>
 </head>
@@ -56,5 +61,8 @@
 
     <button id="btn1">send1</button>
     <button id="btn2">send2</button>
+
+    <button id="btn3">layer</button>
+
 </body>
 </html>

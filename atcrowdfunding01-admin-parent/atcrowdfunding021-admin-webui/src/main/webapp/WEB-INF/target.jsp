@@ -9,6 +9,9 @@
 <html>
 <head>
     <title>Title</title>
+    <script>
+        layer
+    </script>
 </head>
 <body>
     ${requestScope.adminList}

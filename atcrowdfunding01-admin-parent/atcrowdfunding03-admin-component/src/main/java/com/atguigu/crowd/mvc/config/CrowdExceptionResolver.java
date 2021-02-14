@@ -1,5 +1,7 @@
 package com.atguigu.crowd.mvc.config;
 
+import com.atguigu.crowd.constant.CrowdConstant;
+import com.atguigu.crowd.exception.LoginFailedException;
 import com.atguigu.crowd.util.CrowdUtil;
 import com.atguigu.crowd.util.ResultEntity;
 import com.google.gson.Gson;
@@ -18,20 +20,30 @@ import java.io.IOException;
 public class CrowdExceptionResolver {
 
     /**
-     * 专门处理空指针异常
+     * 处理自定义的登陆失败异常
      */
-    @ExceptionHandler(NullPointerException.class)
-    public ModelAndView resolveNullPointException(NullPointerException exception,
-                                                  HttpServletRequest request,
-                                                  HttpServletResponse response) throws IOException {
+    @ExceptionHandler(LoginFailedException.class)
+    public ModelAndView resolveLoginFailedException(LoginFailedException exception,
+                                                   HttpServletRequest request,
+                                                   HttpServletResponse response) throws IOException {
+        return commonResolve("admin-login", exception, request, response);
+    }
+
+    /**
+     * 处理算数异常
+     */
+    @ExceptionHandler(ArithmeticException.class)
+    public ModelAndView resolveArithmeticException(ArithmeticException exception,
+                                                   HttpServletRequest request,
+                                                   HttpServletResponse response) throws IOException {
         return commonResolve("system-error", exception, request, response);
     }
 
     /**
-     * 专门处理算数异常
+     * 处理空指针异常
      */
-    @ExceptionHandler(ArithmeticException.class)
-    public ModelAndView resolveNullPointException(ArithmeticException exception,
+    @ExceptionHandler(NullPointerException.class)
+    public ModelAndView resolveNullPointException(NullPointerException exception,
                                                   HttpServletRequest request,
                                                   HttpServletResponse response) throws IOException {
         return commonResolve("system-error", exception, request, response);
@@ -46,7 +58,6 @@ public class CrowdExceptionResolver {
      * @return json或modelAndView
      * @throws IOException
      */
-    @ExceptionHandler(NullPointerException.class)
     private ModelAndView commonResolve(String viewName,
                                        Exception exception,
                                        HttpServletRequest request,
@@ -67,7 +78,7 @@ public class CrowdExceptionResolver {
         // 6.非Ajax请求，创建modelAndView对象
         ModelAndView modelAndView = new ModelAndView(viewName);
         // 7.将exception对象存入模型
-        modelAndView.addObject("exception", exception);
+        modelAndView.addObject(CrowdConstant.ATTR_NAME_EXCEPTION, exception);
         // 8.返回
         return modelAndView;
     }

@@ -30,11 +30,11 @@ public class TestHandler {
     public String test(ModelMap modelMap, HttpServletRequest request) {
         List<Admin> adminList = adminService.getAll();
         modelMap.addAttribute("adminList", adminList);
-//        int i = 1 / 0;
         boolean judge = CrowdUtil.judgeRequestType(request);
         logger.info("judgeRequestType = " + judge);
-        String s = null;
-        s.equals("test");
+        int i = 1 / 0;
+//        String s = null;
+//        s.equals("test");
         return "target";
     }
 
@@ -51,8 +51,8 @@ public class TestHandler {
         logger.info(array.toString());
         boolean judge = CrowdUtil.judgeRequestType(request);
         logger.info("judgeRequestType = " + judge);
-        String s = null;
-        s.equals("test");
+//        String s = null;
+//        s.equals("test");
         return ResultEntity.successWithData(array);
     }
 }
