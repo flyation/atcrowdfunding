@@ -48,6 +48,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>dispatcherServlet</servlet-name>
+        <!-- 伪静态 -->
         <url-pattern>*.html</url-pattern>
         <url-pattern>*.json</url-pattern>
     </servlet-mapping>
