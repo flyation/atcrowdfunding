@@ -2,6 +2,7 @@ package com.atguigu.crowd.mvc.handler;
 
 import com.atguigu.crowd.entity.Admin;
 import com.atguigu.crowd.service.api.AdminService;
+import com.atguigu.crowd.util.CrowdUtil;
 import com.atguigu.crowd.util.ResultEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,18 +14,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
 public class TestHandler {
 
+    private Logger logger = LoggerFactory.getLogger(TestHandler.class);
+
+
     @Autowired
     private AdminService adminService;
 
     @RequestMapping("/test/ssm.html")
-    public String test(ModelMap modelMap) {
+    public String test(ModelMap modelMap, HttpServletRequest request) {
         List<Admin> adminList = adminService.getAll();
         modelMap.addAttribute("adminList", adminList);
+//        int i = 1 / 0;
+        boolean judge = CrowdUtil.judgeRequestType(request);
+        logger.info("judgeRequestType = " + judge);
+        String s = null;
+        s.equals("test");
         return "target";
     }
 
@@ -37,9 +47,12 @@ public class TestHandler {
 
     @RequestMapping("/send/array2.json")
     @ResponseBody
-    public ResultEntity<List<Integer>> array2(@RequestBody List<Integer> array) {
-        Logger logger = LoggerFactory.getLogger(TestHandler.class);
+    public ResultEntity<List<Integer>> array2(@RequestBody List<Integer> array, HttpServletRequest request) {
         logger.info(array.toString());
+        boolean judge = CrowdUtil.judgeRequestType(request);
+        logger.info("judgeRequestType = " + judge);
+        String s = null;
+        s.equals("test");
         return ResultEntity.successWithData(array);
     }
 }

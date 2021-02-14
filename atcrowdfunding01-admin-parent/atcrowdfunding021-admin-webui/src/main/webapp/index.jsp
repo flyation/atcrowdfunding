@@ -21,7 +21,7 @@
                     url: 'send/array1.html',
                     type: 'post',
                     data: {
-                        array: [1, 2, 8]
+                        'array[]': [1, 2, 8]
                     },
                     dataType: 'text',
                     success: function (response) {
