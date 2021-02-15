@@ -2,6 +2,8 @@ package com.atguigu.crowd.mvc.config;
 
 import com.atguigu.crowd.constant.CrowdConstant;
 import com.atguigu.crowd.exception.AccessForbiddenException;
+import com.atguigu.crowd.exception.LoginAcctAlreadyInUseException;
+import com.atguigu.crowd.exception.LoginAcctAlreadyInUseForUpdateException;
 import com.atguigu.crowd.exception.LoginFailedException;
 import com.atguigu.crowd.util.CrowdUtil;
 import com.atguigu.crowd.util.ResultEntity;
@@ -19,6 +21,26 @@ import java.io.IOException;
  */
 @ControllerAdvice
 public class CrowdExceptionResolver {
+
+    /**
+     * 处理自定义的更新时检测到账号重复异常
+     */
+    @ExceptionHandler(LoginAcctAlreadyInUseForUpdateException.class)
+    public ModelAndView resolveLoginAcctAlreadyInUseForUpdateException(LoginAcctAlreadyInUseForUpdateException exception,
+                                                              HttpServletRequest request,
+                                                              HttpServletResponse response) throws IOException {
+        return commonResolve("system-error", exception, request, response);
+    }
+
+    /**
+     * 处理自定义的保存时检测到账号重复异常
+     */
+    @ExceptionHandler(LoginAcctAlreadyInUseException.class)
+    public ModelAndView resolveLoginAcctAlreadyInUseException(LoginAcctAlreadyInUseException exception,
+                                                        HttpServletRequest request,
+                                                        HttpServletResponse response) throws IOException {
+        return commonResolve("admin-add", exception, request, response);
+    }
 
     /**
      * 处理自定义的访问被拒绝异常

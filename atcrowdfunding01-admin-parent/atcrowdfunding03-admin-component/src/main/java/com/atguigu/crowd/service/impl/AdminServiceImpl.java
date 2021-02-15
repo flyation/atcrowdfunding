@@ -3,6 +3,8 @@ package com.atguigu.crowd.service.impl;
 import com.atguigu.crowd.constant.CrowdConstant;
 import com.atguigu.crowd.entity.Admin;
 import com.atguigu.crowd.entity.AdminExample;
+import com.atguigu.crowd.exception.LoginAcctAlreadyInUseException;
+import com.atguigu.crowd.exception.LoginAcctAlreadyInUseForUpdateException;
 import com.atguigu.crowd.exception.LoginFailedException;
 import com.atguigu.crowd.mapper.AdminMapper;
 import com.atguigu.crowd.service.api.AdminService;
@@ -10,8 +12,11 @@ import com.atguigu.crowd.util.CrowdUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -68,5 +73,47 @@ public class AdminServiceImpl implements AdminService {
         // 2.执行查询
         List<Admin> list = adminMapper.selectAdminByKeyword(keyword);
         return new PageInfo<>(list);
+    }
+
+    @Override
+    public void remove(Integer adminId) {
+        adminMapper.deleteByPrimaryKey(adminId);
+    }
+
+    @Override
+    public void save(Admin admin) {
+        // 密码加密
+        String userPswd = admin.getUserPswd();
+        userPswd = CrowdUtil.md5(userPswd);
+        admin.setUserPswd(userPswd);
+        // 设置创建时间
+        String createTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        admin.setCreateTime(createTime);
+        try {
+            adminMapper.insert(admin);
+        } catch (Exception e) {
+            if (e instanceof DuplicateKeyException) {
+                throw new LoginAcctAlreadyInUseException(CrowdConstant.MESSAGE_LOGIN_ACCT_ALREADY_IN_USE);
+            }
+            throw e;
+        }
+    }
+
+    @Override
+    public Admin getAdminById(Integer adminId) {
+        return adminMapper.selectByPrimaryKey(adminId);
+    }
+
+    @Override
+    public void update(Admin admin) {
+        try {
+            // 选择性更新（对null值不更新）
+            adminMapper.updateByPrimaryKeySelective(admin);
+        } catch (Exception e) {
+            if (e instanceof DuplicateKeyException) {
+                throw new LoginAcctAlreadyInUseForUpdateException(CrowdConstant.MESSAGE_LOGIN_ACCT_ALREADY_IN_USE);
+            }
+            throw e;
+        }
     }
 }

@@ -32,6 +32,7 @@
     <!-- 配置view-controller，作用是直接将请求路径和视图关联起来，不必再写handler方法 -->
     <mvc:view-controller path="/admin/to/login/page.html" view-name="admin-login"/>
     <mvc:view-controller path="/admin/to/main/page.html" view-name="admin-main"/>
+    <mvc:view-controller path="/admin/to/add/page.html" view-name="admin-add"/>
 
     <!-- 注册拦截器 -->
     <mvc:interceptors>
