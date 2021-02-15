@@ -32,4 +32,18 @@
     <!-- 配置view-controller，作用是直接将请求路径和视图关联起来，不必再写handler方法 -->
     <mvc:view-controller path="/admin/to/login/page.html" view-name="admin-login"/>
     <mvc:view-controller path="/admin/to/main/page.html" view-name="admin-main"/>
+
+    <!-- 注册拦截器 -->
+    <mvc:interceptors>
+        <!-- 登录拦截器 -->
+        <mvc:interceptor>
+            <!-- /*对应一层路径。如/aaa -->
+            <!-- /**对应多层路径。如/aaa/bbb/ccc -->
+            <mvc:mapping path="/**"/>
+            <mvc:exclude-mapping path="/admin/to/login/page.html"/>
+            <mvc:exclude-mapping path="/admin/do/login.html"/>
+            <mvc:exclude-mapping path="/admin/do/logout.html"/>
+            <bean id="loginInterceptor" class="com.atguigu.crowd.mvc.interceptor.LoginInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
 </beans>

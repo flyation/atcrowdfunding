@@ -1,6 +1,7 @@
 package com.atguigu.crowd.mvc.config;
 
 import com.atguigu.crowd.constant.CrowdConstant;
+import com.atguigu.crowd.exception.AccessForbiddenException;
 import com.atguigu.crowd.exception.LoginFailedException;
 import com.atguigu.crowd.util.CrowdUtil;
 import com.atguigu.crowd.util.ResultEntity;
@@ -18,6 +19,16 @@ import java.io.IOException;
  */
 @ControllerAdvice
 public class CrowdExceptionResolver {
+
+    /**
+     * 处理自定义的访问被拒绝异常
+     */
+    @ExceptionHandler(AccessForbiddenException.class)
+    public ModelAndView resolveAccessForbiddenException(AccessForbiddenException exception,
+                                                    HttpServletRequest request,
+                                                    HttpServletResponse response) throws IOException {
+        return commonResolve("admin-login", exception, request, response);
+    }
 
     /**
      * 处理自定义的登陆失败异常
