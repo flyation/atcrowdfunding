@@ -17,6 +17,13 @@ public interface AdminMapper {
 
     int insertSelective(Admin record);
 
+    /**
+     * 根据关键词查询管理员
+     * @param keyword 关键词
+     * @return 管理员列表
+     */
+    List<Admin> selectAdminByKeyword(String keyword);
+
     List<Admin> selectByExample(AdminExample example);
 
     Admin selectByPrimaryKey(Integer id);

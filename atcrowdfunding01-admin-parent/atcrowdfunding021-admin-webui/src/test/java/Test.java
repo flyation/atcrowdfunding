@@ -53,4 +53,12 @@ public class Test {
         Admin admin = new Admin(null, "jerry8", "123123", "杰瑞", "jerry@qq.com", null);
         adminService.saveAdmin(admin);
     }
+    @org.junit.Test
+    public void testInsert() {
+        for (int i = 0; i < 238; i++) {
+            Admin admin = new Admin(null, "jerry" + i, "123123", "杰瑞" + i, "jerry" + i + "@qq.com", null);
+            adminMapper.insert(admin);
+        }
+    }
+
 }

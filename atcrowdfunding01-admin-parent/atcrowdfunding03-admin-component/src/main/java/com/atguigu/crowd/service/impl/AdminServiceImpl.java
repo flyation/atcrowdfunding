@@ -7,6 +7,8 @@ import com.atguigu.crowd.exception.LoginFailedException;
 import com.atguigu.crowd.mapper.AdminMapper;
 import com.atguigu.crowd.service.api.AdminService;
 import com.atguigu.crowd.util.CrowdUtil;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -57,5 +59,14 @@ public class AdminServiceImpl implements AdminService {
         }
         // 4.返回admin
         return admin;
+    }
+
+    @Override
+    public PageInfo<Admin> getPageInfo(String keyword, Integer pageNum, Integer pageSize) {
+        // 1.调用PageHelper的分页功能
+        PageHelper.startPage(pageNum, pageSize);
+        // 2.执行查询
+        List<Admin> list = adminMapper.selectAdminByKeyword(keyword);
+        return new PageInfo<>(list);
     }
 }
