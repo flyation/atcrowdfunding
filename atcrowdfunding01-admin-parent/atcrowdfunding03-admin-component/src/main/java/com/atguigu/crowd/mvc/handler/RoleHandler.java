@@ -8,9 +8,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
 
 @Controller
 public class RoleHandler {
@@ -41,6 +44,26 @@ public class RoleHandler {
     @ResponseBody
     public ResultEntity saveRole(Role role) {
         roleService.saveRole(role);
+        return ResultEntity.successWithoutData();
+    }
+
+    /**
+     * 更新角色
+     */
+    @RequestMapping("/role/update.json")
+    @ResponseBody
+    public ResultEntity updateRole(Role role) {
+        roleService.updateRole(role);
+        return ResultEntity.successWithoutData();
+    }
+
+    /**
+     * 删除角色
+     */
+    @RequestMapping("/role/remove/by/role/id/array.json")
+    @ResponseBody
+    public ResultEntity removeRoleByRoleIdArray(@RequestBody List<Integer> roleIdList) {
+        roleService.removeRole(roleIdList);
         return ResultEntity.successWithoutData();
     }
 }

@@ -27,13 +27,12 @@
             generatePage();
         });
 
-        // 绑定新增按钮事件
+        // 打开新增模态框
         $('#showAddModalBtn').click(function () {
-            // 打开模态窗
             $('#addModal').modal('show')
         });
 
-        // 绑定新增保存按钮事件
+        // 新增的保存按钮
         $('#saveRoleBtn').click(function () {
             // 获取输入的角色名（通过jq属性选择器）
             let roleName = $('#addModal [name=roleName]').val();
@@ -58,7 +57,7 @@
                     generatePage();
                 },
                 error: function (response) {
-                    layer.msg('服务端调用失败！响应状态码=' + response.status + '，说明信息=' + ajaxResult.responseText)
+                    layer.msg('服务端调用失败！响应状态码=' + response.status + '，说明信息=' + response.responseText)
                 },
                 complete: function () {
                     // 关闭模态框
@@ -69,6 +68,139 @@
             })
         });
 
+        // 打开编辑模态框
+        // 由于表格内的数据式动态生成的，翻页后的数据的编辑按钮的绑定事件失效了
+        // 使用jq的on方法解决（核心：找到这些动态元素附着的静态元素）。
+        // 第一个参数：要绑定的事件名；第二个参数：要绑定事件的元素选择器；第三个事件：事件响应函数
+        $('#rolePageBody').on('click', '.showEditModalBtn', function () {
+            // 打开编辑模态框
+            $('#editModal').modal('show')
+            // 回显roleName
+            var roleName = $(this).parent().prev().text();
+            $('#editModal [name=roleName]').val(roleName);
+            // 绑定全局变量，当前数据的roleId
+            window.roleId = this.id
+        });
+
+        // 执行更新
+        $('#updateRoleBtn').click(function () {
+            // 获取文本框roleName的值
+            var roleName = $('#editModal [name=roleName]').val();
+            // 发送更新请求
+            $.ajax({
+                url: 'role/update.json',
+                type: 'post',
+                async: false,
+                data: {
+                    id: window.roleId,
+                    name: roleName
+                },
+                dataType: 'json',
+                success: function (response) {
+                    var result = response.result;
+                    if (result === 'FAILED') {
+                        layer.msg('操作失败！' + result.message);
+                        return;
+                    }
+                    layer.msg('更新成功！');
+                    // 重新加载分页
+                    generatePage();
+                },
+                error: function (response) {
+                    layer.msg('服务端调用失败！响应状态码=' + response.status + '，说明信息=' + response.responseText)
+                },
+                complete: function () {
+                    // 关闭模态框
+                    $('#editModal').modal('hide')
+                }
+            })
+        });
+
+        // 执行删除
+        $('#removeRoleBtn').click(function () {
+            // 发送删除请求
+            $.ajax({
+                url: 'role/remove/by/role/id/array.json',
+                type: 'post',
+                async: false,
+                // 数组通过转json发送（从全局范围获得roleIdArray），后端使用@RequestBody接收
+                data: JSON.stringify(window.roleIdArray),
+                contentType: 'application/json;charset=UTF-8',
+                dataType: 'json',
+                success: function (response) {
+                    var result = response.result;
+                    if (result === 'FAILED') {
+                        layer.msg('操作失败！' + result.message);
+                        return;
+                    }
+                    layer.msg('删除成功！');
+                    // 重新加载分页
+                    generatePage();
+                },
+                error: function (response) {
+                    layer.msg('服务端调用失败！响应状态码=' + response.status + '，说明信息=' + response.responseText)
+                },
+                complete: function () {
+                    // 关闭模态框
+                    $('#confirmModal').modal('hide')
+                }
+            })
+        })
+
+        // 单条删除按钮
+        $('#rolePageBody').on('click', '.removeBtn', function () {
+            var roleArray = [{
+                roleId: this.id,
+                roleName: $(this).parent().prev().text()
+            }]
+            // 打开模态框
+            showConfirmModal(roleArray)
+        });
+
+        // 给总的checkbox绑定点击事件
+        $('#summaryBox').click(function () {
+            // 获取自身的选中状态
+            let currentStatus = this.checked;
+            // 设置子box的状态与总box相同
+            // HTML元素的固有属性使用prop，自定义的属性使用attr
+            $('.itemBox').prop('checked', currentStatus)
+        });
+
+        // 全选、全不选的反向操作
+        $('#rolePageBody').on('click', '.itemBox', function () {
+            // 已选中box的数量
+            let checkedBoxlength = $('.itemBox:checked').length;
+            // 所有box的数量
+            let totalBoxlength = $('.itemBox').length;
+            if (checkedBoxlength === 0) {
+                $('#summaryBox').prop('checked', false);
+            }
+            if (checkedBoxlength === totalBoxlength) {
+                $('#summaryBox').prop('checked', true);
+            }
+        });
+
+        // 批量删除按钮
+        $('#batchRemoveBtn').click(function () {
+            let roleArray = [];
+            // 遍历已选中的box
+            // each中的this是原生dom，要想使用jq函数的话需要先包装为jq对象
+            $('.itemBox:checked').each(function () {
+                let roleId = this.id;
+                // 通过dom操作获取roleName
+                let roleName = $(this).parent().next().text();
+                roleArray.push({
+                    roleId: roleId,
+                    roleName: roleName
+                });
+            });
+            if (roleArray.length === 0) {
+                layer.msg('请至少选择一个执行删除！')
+                return;
+            }
+            // 打开模态框
+            showConfirmModal(roleArray)
+        });
     })
 </script>
 <body>
@@ -92,8 +224,8 @@
                         <button id="searchBtn" type="button" class="btn btn-warning"><i class="glyphicon glyphicon-search"></i> 查询
                         </button>
                     </form>
-                    <button type="button" class="btn btn-danger" style="float:right;margin-left:10px;"><i
-                            class=" glyphicon glyphicon-remove"></i> 删除
+                    <button id="batchRemoveBtn" type="button" class="btn btn-danger" style="float:right;margin-left:10px;">
+                        <i class=" glyphicon glyphicon-remove"></i> 删除
                     </button>
                     <button id="showAddModalBtn" type="button" class="btn btn-primary" style="float:right;">
                         <i class="glyphicon glyphicon-plus"></i> 新增
@@ -105,7 +237,7 @@
                             <thead>
                             <tr>
                                 <th width="30">#</th>
-                                <th width="30"><input type="checkbox"></th>
+                                <th width="30"><input type="checkbox" id="summaryBox"></th>
                                 <th>名称</th>
                                 <th width="100">操作</th>
                             </tr>
@@ -127,5 +259,7 @@
 </div>
 <%-- 引入模态框 --%>
 <%@include file="/WEB-INF/modal-role-add.jsp"%>
+<%@include file="/WEB-INF/modal-role-edit.jsp"%>
+<%@include file="/WEB-INF/modal-role-confirm.jsp"%>
 </body>
 </html>

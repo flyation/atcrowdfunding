@@ -59,16 +59,15 @@ function fillTableBody(pageInfo) {
     // 遍历pageInfo.list，填充新数据
     for (let i = 0; i < pageInfo.size; i++) {
         let role = pageInfo.list[i];
-        console.log(role)
         $('#rolePageBody').append(`
                             <tr>
                                 <td>${i + 1}</td>
-                                <td><input type="checkbox"><input type="hidden" name="id" value="${role.id}"></td>
+                                <td><input type="checkbox" id="${role.id}" class="itemBox"></td>
                                 <td>${role.name}</td>
                                 <td>
                                     <button type="button" class="btn btn-success btn-xs"><i class=" glyphicon glyphicon-check"></i></button>
-                                    <button type="button" class="btn btn-primary btn-xs"><i class=" glyphicon glyphicon-pencil"></i></button>
-                                    <button type="button" class="btn btn-danger btn-xs"><i class=" glyphicon glyphicon-remove"></i></button>
+                                    <button type="button" id="${role.id}" class="btn btn-primary btn-xs showEditModalBtn"><i class=" glyphicon glyphicon-pencil"></i></button>
+                                    <button type="button" id="${role.id}" class="btn btn-danger btn-xs removeBtn"><i class=" glyphicon glyphicon-remove"></i></button>
                                 </td>
                             </tr>`)
     }
@@ -109,4 +108,24 @@ function pageselectCallback(page_index, jq){
     generatePage();
     // 由于每一个页码都是超链接，所以在最后取消超链接的默认行为
     return false;
+}
+
+/**
+ * 删除确认模态框
+ */
+function showConfirmModal(roleArray) {
+    // 打开模态框
+    $('#confirmModal').modal('show');
+    // 先清除旧数据
+    $('#roleNameDiv').empty();
+    // 在全局范围创建roleArray用于保存roleId
+    window.roleIdArray = [];
+    // 遍历roleArray，添加新数据
+    for (let i = 0; i < roleArray.length; i++) {
+        let role = roleArray[i];
+        let roleId = role.roleId;
+        let roleName = role.roleName;
+        $('#roleNameDiv').append(roleName + '<br>');
+        window.roleIdArray.push(roleId);
+    }
 }
