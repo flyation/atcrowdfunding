@@ -101,8 +101,7 @@
                             <tfoot>
                             <tr>
                                 <td colspan="6" align="center">
-                                    <!-- 这里显示分页 -->
-                                    <div id="Pagination" class="pagination"></div>
+                                    <div id="Pagination" class="pagination"><!-- 这里显示分页 --></div>
                                 </td>
                             </tr>
 

@@ -14,7 +14,7 @@
                 driverClass="com.mysql.cj.jdbc.Driver"
                 connectionURL="jdbc:mysql://121.199.7.212:3306/project_crowd"
                 userId="root"
-                password="***" />
+                password="123456" />
 
         <!-- 默认false，把JDBC DECIMAL和NUMERIC类型解析为Integer，
             为true时把JDBC DECIMAL和NUMERIC类型解析为java.math.BigDecimal -->
@@ -47,6 +47,6 @@
         </javaClientGenerator>
 
         <!-- 数据库表名字和我们的entity类对应的映射指定 -->
-        <table tableName="t_admin" domainObjectName="Admin" />
+        <table tableName="t_role" domainObjectName="Role" />
     </context>
 </generatorConfiguration>

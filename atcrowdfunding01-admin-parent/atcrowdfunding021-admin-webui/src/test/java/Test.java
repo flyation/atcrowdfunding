@@ -1,5 +1,7 @@
 import com.atguigu.crowd.entity.Admin;
+import com.atguigu.crowd.entity.Role;
 import com.atguigu.crowd.mapper.AdminMapper;
+import com.atguigu.crowd.mapper.RoleMapper;
 import com.atguigu.crowd.service.api.AdminService;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -25,6 +27,9 @@ public class Test {
 
     @Autowired
     private AdminService adminService;
+
+    @Autowired
+    private RoleMapper roleMapper;
 
     @org.junit.Test
     public void test1() throws SQLException {
@@ -54,11 +59,18 @@ public class Test {
         adminService.saveAdmin(admin);
     }
     @org.junit.Test
-    public void testInsert() {
+    public void testInsertAdmin() {
         for (int i = 0; i < 238; i++) {
             Admin admin = new Admin(null, "jerry" + i, "123123", "杰瑞" + i, "jerry" + i + "@qq.com", null);
             adminMapper.insert(admin);
         }
     }
 
+    @org.junit.Test
+    public void testInsertRole() {
+        for (int i = 0; i < 238; i++) {
+            Role role = new Role(null, "role" + i);
+            roleMapper.insert(role);
+        }
+    }
 }
