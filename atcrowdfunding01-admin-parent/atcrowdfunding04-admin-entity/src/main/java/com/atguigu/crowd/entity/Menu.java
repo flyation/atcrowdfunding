@@ -23,5 +23,5 @@ public class Menu {
 
     private List<Menu> children = new ArrayList<>();
 
-    private Boolean open;
+    private Boolean open = true;
 }

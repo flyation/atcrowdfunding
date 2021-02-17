@@ -18,4 +18,21 @@ public class MenuServiceImpl implements MenuService {
     public List<Menu> getAll() {
         return menuMapper.selectByExample(null);
     }
+
+    @Override
+    public void saveMenu(Menu menu) {
+        menuMapper.insert(menu);
+    }
+
+    @Override
+    public void updateMenu(Menu menu) {
+        // 由于pid没有传，此处需要使用有选择地更新，保证pid字段不会被置空
+        menuMapper.updateByPrimaryKeySelective(menu);
+
+    }
+
+    @Override
+    public void removeMenu(Integer menuId) {
+        menuMapper.deleteByPrimaryKey(menuId);
+    }
 }

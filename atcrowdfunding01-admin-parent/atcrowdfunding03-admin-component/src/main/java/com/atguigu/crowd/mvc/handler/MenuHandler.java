@@ -6,15 +6,14 @@ import com.atguigu.crowd.util.ResultEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
-@Controller
+@RestController
 public class MenuHandler {
 
     private Logger logger = LoggerFactory.getLogger(MenuHandler.class);
@@ -26,7 +25,7 @@ public class MenuHandler {
      * 使用双重嵌套循环构造树结构，时间复杂度太高，T(n)=O(n^2)
      */
     @RequestMapping("/menu/get/whole/tree/old.json")
-    @ResponseBody
+//    @ResponseBody
     public ResultEntity<Menu> getWholeTreeOld() {
         // 查出所有menu对象
         List<Menu> menuList = menuService.getAll();
@@ -57,7 +56,7 @@ public class MenuHandler {
      * 在第一次遍历时用一个hashMap记录id和menu的对应关系，降低时间复杂度（使用hashMap空间换时间），T(n)=O(n)
      */
     @RequestMapping("/menu/get/whole/tree.json")
-    @ResponseBody
+//    @ResponseBody
     public ResultEntity<Menu> getWholeTree() {
         // 查出所有menu对象
         List<Menu> menuList = menuService.getAll();
@@ -82,5 +81,35 @@ public class MenuHandler {
             father.getChildren().add(menu);
         }
         return ResultEntity.successWithData(root);
+    }
+
+    /**
+     * 保存菜单
+     */
+    @RequestMapping("/menu/save.json")
+//    @ResponseBody
+    public ResultEntity saveMenu(Menu menu) {
+        menuService.saveMenu(menu);
+        return ResultEntity.successWithoutData();
+    }
+
+    /**
+     * 更新菜单
+     */
+    @RequestMapping("/menu/update.json")
+//    @ResponseBody
+    public ResultEntity updateMenu(Menu menu) {
+        menuService.updateMenu(menu);
+        return ResultEntity.successWithoutData();
+    }
+
+    /**
+     * 删除菜单
+     */
+    @RequestMapping("/menu/remove.json")
+//    @ResponseBody
+    public ResultEntity removeMenu(Integer menuId) {
+        menuService.removeMenu(menuId);
+        return ResultEntity.successWithoutData();
     }
 }

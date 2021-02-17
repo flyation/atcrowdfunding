@@ -56,8 +56,8 @@
                     window.pageNum = 999999; //设置一个大值，使跳到最后一页
                     generatePage();
                 },
-                error: function (response) {
-                    layer.msg('服务端调用失败！响应状态码=' + response.status + '，说明信息=' + response.responseText)
+                error: function (xhr) {
+                    layer.msg('服务端调用失败！响应状态码=' + xhr.status + '，说明信息=' + xhr.responseText)
                 },
                 complete: function () {
                     // 关闭模态框
@@ -106,8 +106,8 @@
                     // 重新加载分页
                     generatePage();
                 },
-                error: function (response) {
-                    layer.msg('服务端调用失败！响应状态码=' + response.status + '，说明信息=' + response.responseText)
+                error: function (xhr) {
+                    layer.msg('服务端调用失败！响应状态码=' + xhr.status + '，说明信息=' + xhr.responseText)
                 },
                 complete: function () {
                     // 关闭模态框
@@ -137,8 +137,8 @@
                     // 重新加载分页
                     generatePage();
                 },
-                error: function (response) {
-                    layer.msg('服务端调用失败！响应状态码=' + response.status + '，说明信息=' + response.responseText)
+                error: function (xhr) {
+                    layer.msg('服务端调用失败！响应状态码=' + xhr.status + '，说明信息=' + xhr.responseText)
                 },
                 complete: function () {
                     // 关闭模态框
