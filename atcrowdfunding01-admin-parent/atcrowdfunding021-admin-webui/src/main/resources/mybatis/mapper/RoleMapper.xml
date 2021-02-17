@@ -67,12 +67,27 @@
     id, name
   </sql>
 
+  <!-- 通过关键词查询角色 -->
   <select id="selectRoleByKeyword" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from t_role
     where
     name like concat('%', #{keyword}, '%')
+  </select>
+
+  <!-- 通过adminId查询已分配角色 -->
+  <select id="selectAssignedRole" resultType="com.atguigu.crowd.entity.Role">
+    select id, name
+    from t_role
+    where id in (select role_id from inner_admin_role where admin_id = #{adminId})
+  </select>
+
+  <!-- 通过adminId查询未分配角色 -->
+  <select id="selectUnassignedRole" resultType="com.atguigu.crowd.entity.Role">
+    select id, name
+    from t_role
+    where id not in (select role_id from inner_admin_role where admin_id = #{adminId})
   </select>
 
 
