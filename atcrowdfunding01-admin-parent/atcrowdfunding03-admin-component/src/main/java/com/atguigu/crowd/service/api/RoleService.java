@@ -18,4 +18,6 @@ public interface RoleService {
     List<Role> getAssignedRole(Integer adminId);
 
     List<Role> getUnassignedRole(Integer adminId);
+
+    void saveAdminRoleRelationship(Integer adminId, List<String> roleIdList);
 }

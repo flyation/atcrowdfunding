@@ -7,6 +7,9 @@
 <%-- 分页插件的css和js（注意，要在jq之后） --%>
 <link rel="stylesheet" href="css/pagination.css">
 <script src="jquery/jquery.pagination.js"></script>
+<%-- 引入zTree的css和js --%>
+<link rel="stylesheet" href="ztree/zTreeStyle.css">
+<script src="ztree/jquery.ztree.all-3.5.min.js"></script>
 <%-- 引入我们自己写的js --%>
 <script type="text/javascript" src="crowd/my-role.js"></script>
 <script>
@@ -201,6 +204,54 @@
             // 打开模态框
             showConfirmModal(roleArray)
         });
+
+        // 打开绑定权限的模态框
+        $('#rolePageBody').on('click', '.checkBtn', function () {
+            // 将roleId绑定到全局变量
+            window.roleId = this.id
+            // 打开绑定权限模态框
+            $('#assignModal').modal('show')
+            // 生成树
+            fillAuthTree();
+        });
+
+        // 执行更新绑定的权限
+        $('#assignBtn').click(function () {
+            // 获取树中已选中的节点的id
+            let authIdArray = [];
+            let zTreeObj = $.fn.zTree.getZTreeObj('authTreeDemo');
+            let checkedNodes = zTreeObj.getCheckedNodes(true);
+            for (let i = 0; i < checkedNodes.length; i++) {
+                authIdArray.push(checkedNodes[i].id)
+            }
+            // 请求体内容（为了方便后端接收，此处把roleId放到数组中，这样后端可以用Map<String, List<Integer>>统一接收）
+            let requestBody = {
+                authIdArray: authIdArray,
+                roleId: [window.roleId]
+            };
+            // 发送ajax请求
+            $.ajax({
+                url: 'assign/do/role/assign/auth.json',
+                type: 'post',
+                contentType: 'application/json;charset=UTF-8',
+                data: JSON.stringify(requestBody),
+                dataType: 'json',
+                success: function (response) {
+                    if (response.result === 'FAILED') {
+                        layer.msg('操作失败！' + response.message);
+                        return;
+                    }
+                    // 消息提示
+                    layer.msg('权限分配成功！');
+                    // 关闭模态框
+                    $('#assignModal').modal('hide')
+
+                },
+                error: function (xhr) {
+                    layer.msg('服务端调用失败！响应状态码=' + xhr.status + '，说明信息=' + xhr.responseText)
+                }
+            });
+        });
     })
 </script>
 <body>
@@ -261,5 +312,6 @@
 <%@include file="/WEB-INF/modal-role-add.jsp"%>
 <%@include file="/WEB-INF/modal-role-edit.jsp"%>
 <%@include file="/WEB-INF/modal-role-confirm.jsp"%>
+<%@include file="/WEB-INF/modal-role-assign-auth.jsp"%>
 </body>
 </html>

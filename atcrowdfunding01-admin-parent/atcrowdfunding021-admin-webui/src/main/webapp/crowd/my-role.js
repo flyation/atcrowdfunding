@@ -65,7 +65,7 @@ function fillTableBody(pageInfo) {
                                 <td><input type="checkbox" id="${role.id}" class="itemBox"></td>
                                 <td>${role.name}</td>
                                 <td>
-                                    <button type="button" class="btn btn-success btn-xs"><i class=" glyphicon glyphicon-check"></i></button>
+                                    <button type="button" id="${role.id}" class="btn btn-success btn-xs checkBtn"><i class=" glyphicon glyphicon-check"></i></button>
                                     <button type="button" id="${role.id}" class="btn btn-primary btn-xs showEditModalBtn"><i class=" glyphicon glyphicon-pencil"></i></button>
                                     <button type="button" id="${role.id}" class="btn btn-danger btn-xs removeBtn"><i class=" glyphicon glyphicon-remove"></i></button>
                                 </td>
@@ -128,4 +128,89 @@ function showConfirmModal(roleArray) {
         $('#roleNameDiv').append(roleName + '<br>');
         window.roleIdArray.push(roleId);
     }
+}
+
+/**
+ * 填充分配权限的树
+ */
+function fillAuthTree() {
+    // 1.发送ajax查询树形结构数据，初始化zTree
+    $.ajax({
+        url: 'assign/get/all/auth.json',
+        type: 'get',
+        dataType: 'json',
+        async: false,
+        success: function (response) {
+            if (response.result === 'FAILED') {
+                layer.msg('操作失败！' + response.message);
+                return;
+            }
+            // 获取到的树形结构的JSON数据
+            var authList = response.data;
+            // zTree的设置
+            var setting = {
+                check: {
+                    // 显示checkbox
+                    enable: true
+                },
+                data: {
+                    key: {
+                        // 指定节点名称的属性名称
+                        name: 'title'
+                    },
+                    simpleData: {
+                        // 开启简单JSON数据模式
+                        enable: true,
+                        // 指定父节点唯一标识的属性名称
+                        pIdKey: 'categoryId'
+                    }
+                }
+            }
+            // 初始化zTree
+            $.fn.zTree.init($('#authTreeDemo'), setting, authList);
+            // 通过zTreeObj设置默认展开所有节点
+            let zTreeObj = $.fn.zTree.getZTreeObj('authTreeDemo');
+            zTreeObj.expandAll(true);
+        },
+        error: function (xhr) {
+            layer.msg('服务端调用失败！响应状态码=' + xhr.status + '，说明信息=' + xhr.responseText)
+        }
+    });
+
+    // 2.查询已经分配的权限
+    $.ajax({
+        url: 'assign/get/assigned/auth/id/by/role/id.json',
+        type: 'get',
+        data: {
+            roleId: window.roleId
+        },
+        dataType: 'json',
+        async: false,
+        success: function (response) {
+            if (response.result === 'FAILED') {
+                layer.msg('操作失败！' + response.message);
+                return;
+            }
+            // 2.1获取已分配的权限的id
+            var authIdArray = response.data;
+            // 2.2勾选已分配的权限的节点
+            // 2.2.1.获取zTreeObj
+            let zTreeObj = $.fn.zTree.getZTreeObj('authTreeDemo');
+            // 2.2.2 根据id遍历节点
+            for (let i = 0; i < authIdArray.length; i++) {
+                // 2.2.3 获取treeNode
+                let treeNode = zTreeObj.getNodeByParam('id', authIdArray[i]);
+                // 2.2.4 设置勾选状态
+                // Function(treeNode, checked, checkTypeFlag, callbackFlag)
+                // 第1个参数：treeNode
+                // 第2个参数：是否选中
+                // 第3个参数：是否联动父节点
+                // 第4个参数：是否触发beforeCheck & onCheck 事件回调函数
+                zTreeObj.checkNode(treeNode, true, false, false)
+            }
+        },
+        error: function (xhr) {
+            layer.msg('服务端调用失败！响应状态码=' + xhr.status + '，说明信息=' + xhr.responseText)
+        }
+    });
 }

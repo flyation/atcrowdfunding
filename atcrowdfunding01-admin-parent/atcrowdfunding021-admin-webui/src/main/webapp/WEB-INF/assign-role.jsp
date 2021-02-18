@@ -13,7 +13,6 @@
         // :selected表示被选中的option
         // appendTo表示将指定的jq对象追加到指定元素内部的最后
         // prependTo表示将指定的jq对象追加到指定元素内部的最前
-
         // 右箭头（未分配->已分配）
         $('.glyphicon-chevron-right').click(function () {
             $('select:eq(0) > option:selected').appendTo('select:eq(1)');
@@ -21,6 +20,11 @@
         // 左箭头（已分配->未分配）
         $('.glyphicon-chevron-left').click(function () {
             $('select:eq(1) > option:selected').prependTo('select:eq(0)');
+        });
+
+        // 点击保存时将已分配下拉框中的所有选项都选中
+        $('#submitBtn').click(function () {
+            $('select:eq(1) > option').prop('selected', 'selected');
         });
     })
 </script>
@@ -37,6 +41,7 @@
             </ol>
             <div class="panel panel-default">
                 <div class="panel-body">
+                    <h3>param:${param}</h3>
                     <form role="form" class="form-inline" action="assign/do/role/assign.html" method="post">
                         <input type="hidden" name="adminId" value="${param.adminId}">
                         <input type="hidden" name="pageNum" value="${param.pageNum}">
@@ -67,7 +72,7 @@
 
                         <br>
                         <br>
-                        <button id="backBtn" class="btn btn-lg btn-success btn-block" style="width: 200px;">提交1</button>
+                        <button id="submitBtn" class="btn btn-lg btn-success btn-block" style="width: 200px;">提交1</button>
                     </form>
                 </div>
             </div>

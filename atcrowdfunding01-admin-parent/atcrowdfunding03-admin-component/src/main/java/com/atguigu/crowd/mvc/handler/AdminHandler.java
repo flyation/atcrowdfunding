@@ -102,7 +102,7 @@ public class AdminHandler {
     @RequestMapping("/admin/update.html")
     public String update(Admin admin,
                          @RequestParam("pageNum") Integer pageNum,
-                         @RequestParam("keyword") Integer keyword) {
+                         @RequestParam("keyword") String keyword) {
         // 执行更新
         adminService.update(admin);
         return "redirect:/admin/get/page.html?pageNum=" + pageNum + "&keyword=" + keyword;

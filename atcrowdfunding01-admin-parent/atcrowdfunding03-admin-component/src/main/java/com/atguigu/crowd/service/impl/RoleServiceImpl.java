@@ -54,4 +54,15 @@ public class RoleServiceImpl implements RoleService {
     public List<Role> getUnassignedRole(Integer adminId) {
         return roleMapper.selectUnassignedRole(adminId);
     }
+
+    @Override
+    public void saveAdminRoleRelationship(Integer adminId, List<String> roleIdList) {
+        // 1.根据adminId删除原来的所有权限
+        roleMapper.deleteRoleRelationship(adminId);
+        // 2.插入新的权限（若roleIdList不为空）
+        if (roleIdList == null || roleIdList.isEmpty()) {
+            return;
+        }
+        roleMapper.insertNewRelationship(adminId, roleIdList);
+    }
 }

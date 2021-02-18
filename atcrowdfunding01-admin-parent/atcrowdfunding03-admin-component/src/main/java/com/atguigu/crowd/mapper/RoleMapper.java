@@ -39,4 +39,9 @@ public interface RoleMapper {
     List<Role> selectAssignedRole(Integer adminId);
 
     List<Role> selectUnassignedRole(Integer adminId);
+
+    void deleteRoleRelationship(Integer adminId);
+
+    // 需要加@Param注解（见对应的mapper.xml）
+    void insertNewRelationship(@Param("adminId") Integer adminId, @Param("roleIdList") List<String> roleIdList);
 }
