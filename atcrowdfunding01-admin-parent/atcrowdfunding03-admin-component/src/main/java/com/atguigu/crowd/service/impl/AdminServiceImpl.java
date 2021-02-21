@@ -116,4 +116,14 @@ public class AdminServiceImpl implements AdminService {
             throw e;
         }
     }
+
+    @Override
+    public Admin getAdminByLoginAcct(String username) {
+        AdminExample adminExample = new AdminExample();
+        AdminExample.Criteria criteria = adminExample.createCriteria();
+        criteria.andLoginAcctEqualTo(username);
+        List<Admin> list = adminMapper.selectByExample(adminExample);
+        Admin admin = list.get(0);
+        return admin;
+    }
 }

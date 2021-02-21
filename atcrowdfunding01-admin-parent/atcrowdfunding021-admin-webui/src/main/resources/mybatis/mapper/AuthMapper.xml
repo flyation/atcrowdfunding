@@ -73,6 +73,15 @@
     select auth_id from inner_role_auth where role_id = #{roleId}
   </select>
 
+  <!-- 根据admin_id查询已分配的权限名称 -->
+  <select id="selectAssignedAuthNameByAdminId" resultType="java.lang.String">
+    select distinct t3.name
+    from inner_admin_role t1
+             left join inner_role_auth t2 on t1.role_id = t2.role_id
+             left join t_auth t3 on t2.auth_id = t3.id
+    where t1.admin_id = #{adminId} and t3.name is not null and t3.name != '';
+  </select>
+
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.atguigu.crowd.entity.AuthExample" >
     select
     <if test="distinct" >
@@ -161,7 +170,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByExampleSelective" parameterType="map" >
+    <update id="updateByExampleSelective" parameterType="map" >
     update t_auth
     <set >
       <if test="record.id != null" >

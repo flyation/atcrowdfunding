@@ -35,4 +35,6 @@ public interface AuthMapper {
 
     // 需要加@Param注解（见对应的mapper.xml）
     void insertNewRelationship(@Param("roleId") Integer roleId, @Param("authIdList") List<Integer> authIdList);
+
+    List<String> selectAssignedAuthNameByAdminId(Integer adminId);
 }
