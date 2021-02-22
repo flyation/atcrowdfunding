@@ -72,7 +72,7 @@
                                 <th width="30">#</th>
                                 <th width="30"><input type="checkbox"></th>
                                 <th>账号</th>
-                                <th>名称</th>
+                                <th>密码</th>
                                 <th>邮箱地址</th>
                                 <th width="100">操作</th>
                             </tr>

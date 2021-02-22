@@ -49,4 +49,11 @@
         <aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut"/>
     </aop:config>
 
+
+    <!-- 由于子IoC可以通过parent属性获取父IoC，所以可以使用父IoC的bean，而父IoC不能使用子IoC的bean -->
+    <!-- 若在WebAppSecurityConfig声明这个bean，
+        由于WebAppSecurityConfig类是通过Spring MVC的IoC（子）扫描的，而xxxServiceImpl类是通过Spring的IoC（父）扫描的，
+         Spring的IoC是父级（根级）IoC，无法使用Spring MVC的IoC中的bean，
+         所以把这个bean的声明放到这个来。-->
+    <bean id="bCryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
 </beans>

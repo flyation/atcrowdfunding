@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 // 声明配置类
 @Configuration
@@ -17,10 +18,16 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 public class WebAppSecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
-     * 我们自己写的UserDetailsService
+     * 我们自己写的基于数据库认证的UserDetailsService
      */
     @Autowired
     private UserDetailsService userDetailsService;
+
+    /**
+     * 用于密码加密的PasswordEncoder
+     */
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Override
     protected void configure(AuthenticationManagerBuilder builder) throws Exception {
@@ -33,7 +40,10 @@ public class WebAppSecurityConfig extends WebSecurityConfigurerAdapter {
 //                ;
 
         // 正式的基于数据库的登录
-        builder.userDetailsService(userDetailsService);
+        builder
+                .userDetailsService(userDetailsService)     // 我们自己写的基于数据库认证的UserDetailsService
+                .passwordEncoder(passwordEncoder)   // 密码加密
+                ;
     }
 
     @Override
