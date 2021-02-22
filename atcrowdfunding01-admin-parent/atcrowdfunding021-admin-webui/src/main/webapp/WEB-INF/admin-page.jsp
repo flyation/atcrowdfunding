@@ -72,7 +72,7 @@
                                 <th width="30">#</th>
                                 <th width="30"><input type="checkbox"></th>
                                 <th>账号</th>
-                                <th>密码</th>
+                                <th>昵称</th>
                                 <th>邮箱地址</th>
                                 <th width="100">操作</th>
                             </tr>
@@ -87,7 +87,7 @@
                                         <td>${myStatus.count}</td>
                                         <td><input type="checkbox"></td>
                                         <td>${admin.loginAcct}</td>
-                                        <td>${admin.userPswd}</td>
+                                        <td>${admin.userName}</td>
                                         <td>${admin.email}</td>
                                         <td>
                                             <a href="assign/to/assign/role/page.html?adminId=${admin.id}&pageNum=${requestScope.pageInfo.pageNum}&keyword=${param.keyword}" class="btn btn-success btn-xs"><i class=" glyphicon glyphicon-check"></i></a>

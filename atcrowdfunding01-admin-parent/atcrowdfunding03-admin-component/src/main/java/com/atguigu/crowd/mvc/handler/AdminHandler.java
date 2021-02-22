@@ -7,6 +7,7 @@ import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -77,8 +78,9 @@ public class AdminHandler {
      * 注意:此处使用from表单post提交，Spring MVC可直接封装为admin，无需添加@RequestBody注解。
      * 注解@RequestBody是用来将请求体里的json转换为对象的，若请求不设置contentType:'application/json'则报错415
      */
+    @PreAuthorize("hasAuthority('user:save')")
     @RequestMapping("/admin/save.html")
-    public String add(Admin admin) {
+    public String save(Admin admin) {
         adminService.save(admin);
         return "redirect:/admin/get/page.html?pageNum=" + Integer.MAX_VALUE;
     }

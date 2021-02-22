@@ -8,6 +8,7 @@ import com.atguigu.crowd.exception.LoginFailedException;
 import com.atguigu.crowd.util.CrowdUtil;
 import com.atguigu.crowd.util.ResultEntity;
 import com.google.gson.Gson;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
@@ -21,6 +22,16 @@ import java.io.IOException;
  */
 @ControllerAdvice
 public class CrowdExceptionResolver {
+
+    /**
+     * 处理Spring Security拦截的拒绝访问异常
+     */
+    @ExceptionHandler(AccessDeniedException.class)
+    public ModelAndView resolveAccessDeniedException(AccessDeniedException exception,
+                                                                       HttpServletRequest request,
+                                                                       HttpServletResponse response) throws IOException {
+        return commonResolve("system-error", exception, request, response);
+    }
 
     /**
      * 处理自定义的更新时检测到账号重复异常

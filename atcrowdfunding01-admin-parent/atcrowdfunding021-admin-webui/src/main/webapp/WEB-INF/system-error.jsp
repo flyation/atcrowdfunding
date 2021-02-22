@@ -42,6 +42,7 @@
         requestScope.exception.message相当于request.getAttribute("exception").getMessage()
     --%>
     <h3>${requestScope.exception.message}</h3>
+    <h3>${requestScope.exception}</h3>
 <%--    <form class="form-signin">--%>
         <button id="backBtn" class="btn btn-lg btn-success btn-block" style="width: 200px;margin: 0 auto">返回上一步</button>
 <%--    </form>--%>

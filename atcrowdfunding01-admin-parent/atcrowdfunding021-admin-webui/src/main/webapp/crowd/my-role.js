@@ -35,7 +35,7 @@ function getPageInfoRemote() {
     var resultEntity = ajaxResult.responseJSON;
     var result = resultEntity.result;
     if (result === 'FAILED') {
-        layer.msg(result.message)
+        layer.msg(resultEntity.message)
         return null;
     }
     // 确认result成功后返回pageInfo

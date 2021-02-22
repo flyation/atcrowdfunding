@@ -72,7 +72,7 @@
 
                         <br>
                         <br>
-                        <button id="submitBtn" class="btn btn-lg btn-success btn-block" style="width: 200px;">提交1</button>
+                        <button id="submitBtn" class="btn btn-lg btn-success btn-block" style="width: 200px;">提交</button>
                     </form>
                 </div>
             </div>
