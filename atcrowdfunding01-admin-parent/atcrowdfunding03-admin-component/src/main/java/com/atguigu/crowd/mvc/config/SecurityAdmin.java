@@ -22,6 +22,10 @@ public class SecurityAdmin extends User {
         // 调用父类构造器
         super(originalAdmin.getLoginAcct(), originalAdmin.getUserPswd(), authorities);
         this.originalAdmin = originalAdmin;
+        // 擦除原始Admin对象的密码，增强安全性
+        // （密码验证时使用的是org.springframework.security.core.userdetails.User中的password
+        // 已经通过上面的父类构造器传过去了，所以这里可以擦除了，不碍事）
+        this.originalAdmin.setUserPswd(null);
     }
 
     /**
